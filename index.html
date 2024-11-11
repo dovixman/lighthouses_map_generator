@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Mapas Interactivo - Tema Oscuro</title>
+  <title>Interactive Map Generator - Dark Theme</title>
   <style>
     body {
       display: flex;
@@ -34,10 +34,10 @@
       cursor: pointer;
       border: 1px solid #333;
     }
-    .land { background-color: #d2b48c; color: #ffffff; } /* Marrón claro */
-    .water { background-color: #87ceeb; color: #ffffff; } /* Azul claro */
-    .lighthouse { background-color: #9370db; color: #ffffff; } /* Morado */
-    .start { background-color: #8b4513; color: #ffffff; } /* Marrón oscuro */
+    .land { background-color: #d2b48c; color: #ffffff; } /* Light brown */
+    .water { background-color: #87ceeb; color: #ffffff; } /* Light blue */
+    .lighthouse { background-color: #9370db; color: #ffffff; } /* Purple */
+    .start { background-color: #8b4513; color: #ffffff; } /* Dark brown */
     #downloadButton {
       margin-top: 20px;
       padding: 10px 20px;
@@ -50,23 +50,51 @@
     #downloadButton:hover {
       background-color: #666;
     }
+    #instructions {
+      background-color: #333;
+      color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      width: 80%;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    #instructions h2 {
+      margin-top: 0;
+    }
   </style>
 </head>
 <body>
-  <h1>Generador de Mapas Interactivo - Tema Oscuro</h1>
-  <div id="controls">
-    <label for="rows">Filas:</label>
-    <input type="number" id="rows" min="1" value="10">
-    <label for="columns">Columnas:</label>
-    <input type="number" id="columns" min="1" value="10">
-    <button onclick="generateMap()">Generar Mapa</button>
+  <h1>Interactive Lighthouse Map Generator</h1>
+
+  <div id="instructions">
+    <h2>Instructions</h2>
+    <p><strong>1. Generate the map:</strong> Adjust the number of rows and columns, then click "Generate Map".</p>
+    <p><strong>2. Change cell types:</strong> Click on the cells to toggle between the following types:</p>
+    <ul>
+      <li><strong>Land</strong> (value: <code>0</code>) - Represented by a light brown color.</li>
+      <li><strong>Water</strong> (value: <code>#</code>) - Represented by a light blue color.</li>
+      <li><strong>Lighthouse</strong> (value: <code>!</code>) - Represented by a purple color.</li>
+      <li><strong>Start Point</strong> (value: <code>A</code>) - Represented by a dark brown color.</li>
+    </ul>
+    <p><strong>3. Drag to change multiple cells:</strong> Click and hold to drag and change multiple cells at once.</p>
+    <p><strong>4. Download the map:</strong> Once the map is complete, click "Download Map as TXT" to save the generated map as a text file.</p>
   </div>
+
+  <div id="controls">
+    <label for="rows">Rows:</label>
+    <input type="number" id="rows" min="1" value="10">
+    <label for="columns">Columns:</label>
+    <input type="number" id="columns" min="1" value="10">
+    <button onclick="generateMap()">Generate Map</button>
+  </div>
+
   <div id="grid"></div>
-  <button id="downloadButton" onclick="downloadMap()">Descargar Mapa como TXT</button>
+  <button id="downloadButton" onclick="downloadMap()">Download Map as TXT</button>
 
   <script>
     const types = ["land", "water", "lighthouse", "start"];
-    const symbols = ["0", "#", "!", "A"];  // El valor de tierra es 0
+    const symbols = ["0", "#", "!", "A"];  // Land value is 0
     let isDragging = false;
 
     function generateMap() {
@@ -81,7 +109,7 @@
       for (let i = 0; i < rows * columns; i++) {
         const cell = document.createElement("div");
         cell.className = "cell land";
-        cell.innerText = symbols[0]; // Tierra tiene el valor 0
+        cell.innerText = symbols[0]; // Land has value 0
         cell.dataset.typeIndex = 0;
 
         cell.addEventListener("mousedown", () => changeCellType(cell));
@@ -120,7 +148,7 @@
         let rowText = "";
         for (let j = 0; j < columns; j++) {
           const cell = gridContainer.children[i * columns + j];
-          // Reemplazamos los valores de "tierra" (0) por un espacio en blanco
+          // Replace land ("0") with a space
           rowText += cell.innerText === "0" ? " " : cell.innerText;
         }
         mapText += rowText + "\n";
@@ -129,7 +157,7 @@
       const blob = new Blob([mapText], { type: "text/plain" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "mapa.txt";
+      link.download = "map.txt";
       link.click();
     }
   </script>
